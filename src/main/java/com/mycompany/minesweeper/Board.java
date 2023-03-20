@@ -56,6 +56,7 @@ public class Board extends javax.swing.JPanel {
         printMatrix(rows, cols);
     }
 
+
     private void calculateMatrixNumbers(int rows, int cols) {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -191,13 +192,43 @@ public class Board extends javax.swing.JPanel {
                 Color.decode("#808080")} ;
         int item = matrix[row][col];
         JLabel label = new JLabel();
-        //Color.decode("#FFCCEE");
-        
+        Font bold = new Font("Arial", Font.BOLD, 14);
+        label.setFont(bold);
         if (item == BOMB) {
             label.setIcon(Util.getIcon("/images/bomb.png"));
         } else {
             Color color = COLORS[item];
-            
+            label.setForeground(color);
+        }
+        
+        switch (item) {
+            case 0:
+                label.setText(" ");
+                break;
+            case 1:
+                label.setText("  1");
+                break;
+            case 2: 
+                label.setText("  2");
+                break;
+            case 3:
+                label.setText("  3");
+                break;
+            case 4:
+                label.setText("  4");
+                break; 
+            case 5:
+                label.setText("  5");
+                break;
+            case 6:
+                label.setText("  6");
+                break;
+            case 7: 
+                label.setText("  7");
+                break;
+            case 8:
+                label.setText("  8");
+                break;
         }
         return label;
     }
