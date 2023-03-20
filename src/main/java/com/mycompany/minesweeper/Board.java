@@ -5,6 +5,8 @@
 package com.mycompany.minesweeper;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
@@ -16,7 +18,9 @@ public class Board extends javax.swing.JPanel {
     public static final int BOMB = -1;
     
     private int[][] matrix;
+    private TimerInterface timerInterface; 
 
+    
 
     public Board() {
         initComponents();
@@ -133,7 +137,14 @@ public class Board extends javax.swing.JPanel {
                 
                 
                 Button button = new Button();
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        timerInterface.startTimer();
+                    }
+                });
                 button.setSize(getSquareDimension());
+                
                 
                 panel.add(button);
                 panel.add(new JLabel(iconBack));
@@ -142,6 +153,7 @@ public class Board extends javax.swing.JPanel {
             }
         }
     }
+    
     
     private Dimension getSquareDimension() {
         int numRows = Config.instance.getNumRows();
@@ -152,7 +164,9 @@ public class Board extends javax.swing.JPanel {
         return d;
     }
 
-
+    public void setTimerInterface(TimerInterface timerInterface) {
+        this.timerInterface = timerInterface;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

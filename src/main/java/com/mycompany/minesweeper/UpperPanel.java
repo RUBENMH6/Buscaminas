@@ -4,17 +4,18 @@
  */
 package com.mycompany.minesweeper;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 import javax.swing.border.*;
 
-/**
- *
- * @author victor
- */
-public class UpperPanel extends javax.swing.JPanel {
+ 
 
-    /**
-     * Creates new form UpperPanel
-     */
+public class UpperPanel extends javax.swing.JPanel implements TimerInterface {
+
+    private Timer timer;
+    private int seconds;
+    
     public UpperPanel() {
         initComponents();
         myInit();
@@ -25,8 +26,29 @@ public class UpperPanel extends javax.swing.JPanel {
         Border border = labelTime.getBorder();
         Border margin = new EmptyBorder(10,5,5,5);
         labelTime.setBorder(new CompoundBorder(border, margin)); 
+        seconds = 0;
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                tick();
+            }
+        });
+        
     }
-    
+    public void startTimer() {
+        if (!timer.isRunning()) {
+            timer.start();
+        }
+        
+    }
+    private void tick() {
+        seconds++;
+        int min = seconds / 60;
+        int sec = seconds % 60; 
+        String timeStr = String.format("%02d:%02d", min, sec);
+        labelTime.setText(timeStr);
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,9 +88,9 @@ public class UpperPanel extends javax.swing.JPanel {
         panelRight.setLayout(new java.awt.GridBagLayout());
 
         labelTime.setBackground(new java.awt.Color(0, 0, 0));
-        labelTime.setFont(new java.awt.Font("Keraleeyam", 1, 24)); // NOI18N
+        labelTime.setFont(new java.awt.Font("Monospaced", 1, 20)); // NOI18N
         labelTime.setForeground(new java.awt.Color(255, 51, 51));
-        labelTime.setText("0:00");
+        labelTime.setText("00:00");
         labelTime.setOpaque(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -96,7 +118,9 @@ public class UpperPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonSmileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSmileActionPerformed
-        // TODO add your handling code here:
+        timer.stop();
+        seconds = 0;
+        startTimer();
     }//GEN-LAST:event_buttonSmileActionPerformed
 
 
