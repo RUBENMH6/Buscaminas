@@ -13,20 +13,31 @@ import javax.swing.*;
  *
  * @author victor
  */
-public class Board extends javax.swing.JPanel {
+public class Board extends javax.swing.JPanel implements InitGamer {
     
     public static final int BOMB = -1;
     
     private int[][] matrix;
     private TimerInterface timerInterface; 
+    private FlagInterface flagInterface;
 
+    
     
 
     public Board() {
         initComponents();
+        
+    }
+    
+    public void initGame() {
+        removeComponets();
         myInit();
     }
     
+    public void setFlagInterface(FlagInterface flagInterface) {
+        this.flagInterface = flagInterface;
+        
+    }
     private void initMatrix(int rows, int cols) {
         matrix = new int[rows][cols];
         for (int row = 0; row < rows; row++) {
@@ -116,7 +127,7 @@ public class Board extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(10, 10));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void myInit() {        
+    public void myInit() {        
         
         int numRows = Config.instance.getNumRows();
         int numCols = Config.instance.getNumCols();
@@ -141,7 +152,7 @@ public class Board extends javax.swing.JPanel {
                 panel.setLayout(new OverlayLayout(panel));
                 
                 JLabel label = addLabel(row, col);
-                Button button = addButton();
+                Button button = addButton(row,col);
                 
                 panel.add(button);
                 panel.add(label);
@@ -151,21 +162,33 @@ public class Board extends javax.swing.JPanel {
                 add(panel);
             }
         }
+        
     }
-
-    private Button addButton() {
+    
+    private Button addButton(int row, int col) {
         Button button = new Button();
+        button.setFlagInterface(flagInterface);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 timerInterface.startTimer();
+                processClick(row,col);
             }
         });
         button.setSize(getSquareDimension());
         return button;
     }
-    
-    
+    private void processClick(int row, int col) {
+        if (matrix[row][col] == BOMB) {
+            System.out.print("BOOOM");
+        } else {
+           
+        }
+        
+    }
+    private void processGameOver() {
+        
+    }
     private Dimension getSquareDimension() {
         int numRows = Config.instance.getNumRows();
         int numCols = Config.instance.getNumCols();
@@ -192,7 +215,7 @@ public class Board extends javax.swing.JPanel {
                 Color.decode("#808080")} ;
         int item = matrix[row][col];
         JLabel label = new JLabel();
-        Font bold = new Font("Arial", Font.BOLD, 14);
+        Font bold = new Font("Monospace", Font.BOLD, 14);
         label.setFont(bold);
         if (item == BOMB) {
             label.setIcon(Util.getIcon("/images/bomb.png"));
@@ -200,38 +223,18 @@ public class Board extends javax.swing.JPanel {
             Color color = COLORS[item];
             label.setForeground(color);
         }
+        label.setText("  " + (item == 0 ? " " : item));
         
-        switch (item) {
-            case 0:
-                label.setText(" ");
-                break;
-            case 1:
-                label.setText("  1");
-                break;
-            case 2: 
-                label.setText("  2");
-                break;
-            case 3:
-                label.setText("  3");
-                break;
-            case 4:
-                label.setText("  4");
-                break; 
-            case 5:
-                label.setText("  5");
-                break;
-            case 6:
-                label.setText("  6");
-                break;
-            case 7: 
-                label.setText("  7");
-                break;
-            case 8:
-                label.setText("  8");
-                break;
-        }
         return label;
     }
+
+    private void removeComponets() {  
+        for (Component component : getComponents()){
+            remove(component);
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
